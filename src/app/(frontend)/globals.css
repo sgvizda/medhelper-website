@@ -1,0 +1,286 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ──────────────────────────────────────────────────────────────
+   Design tokens. Raw brand values live in :root so the CMS can
+   override --brand-* at runtime (Site Settings → Кольори).
+   ────────────────────────────────────────────────────────────── */
+:root {
+  --brand-ink: #101b2b; /* Deep Navy */
+  --brand-graphite: #172333;
+  --brand-primary: #17b8a6; /* Teal */
+  --brand-accent: #8de4d1; /* Mint */
+
+  --background: #f7f9fc; /* Soft White */
+  --surface: #ffffff;
+  --surface-muted: #eef2f6;
+  --foreground: var(--brand-ink);
+  --muted-foreground: #4a5a6e; /* AA on white & soft white */
+  --subtle-foreground: #66768a;
+  --border: #e3e9f0;
+  --border-strong: #cfd8e3;
+  --ring: var(--brand-primary);
+
+  /* Teal shades derived for text/contrast use */
+  --primary: var(--brand-primary);
+  --primary-strong: color-mix(in oklab, var(--brand-primary) 70%, #04342f); /* AA text on light */
+  --primary-soft: color-mix(in oklab, var(--brand-primary) 10%, white);
+  --primary-foreground: #04211d;
+
+  --danger: #c2413b;
+  --warning: #b7791f;
+  --success: #138a5e;
+
+  --radius: 14px;
+  --header-h: 68px;
+}
+
+/* Dark surfaces (used for accent sections and an optional dark theme) */
+.dark,
+.theme-dark {
+  --background: var(--brand-ink);
+  --surface: var(--brand-graphite);
+  --surface-muted: #1d2b3d;
+  --foreground: #eef3f8;
+  --muted-foreground: #a9b7c7;
+  --subtle-foreground: #8596aa;
+  --border: rgb(255 255 255 / 0.09);
+  --border-strong: rgb(255 255 255 / 0.16);
+  --primary-strong: var(--brand-accent);
+  --primary-soft: rgb(23 184 166 / 0.12);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-ink: var(--brand-ink);
+  --color-graphite: var(--brand-graphite);
+  --color-mint: var(--brand-accent);
+  --color-teal: var(--brand-primary);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 3px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 12px);
+
+  --shadow-soft: 0 1px 2px rgb(16 27 43 / 0.04), 0 8px 24px -12px rgb(16 27 43 / 0.12);
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 1px 2px rgb(16 27 43 / 0.05),
+    0 18px 40px -24px rgb(16 27 43 / 0.25);
+  --shadow-float: 0 30px 80px -30px rgb(16 27 43 / 0.35), 0 8px 20px -10px rgb(16 27 43 / 0.15);
+  --shadow-glow: 0 0 0 1px rgb(23 184 166 / 0.25), 0 10px 40px -10px rgb(23 184 166 / 0.45);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-pulse-soft: pulse-soft 2.4s ease-in-out infinite;
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+  }
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 16px);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-feature-settings: 'ss01', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--brand-primary) 28%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+    letter-spacing: -0.025em;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer components {
+  /* Typographic scale — fluid, safe at 360px */
+  .text-display {
+    font-size: clamp(2.25rem, 1.35rem + 4.2vw, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    font-weight: 600;
+  }
+  .text-h2 {
+    font-size: clamp(1.875rem, 1.3rem + 2.4vw, 3.25rem);
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+  }
+  .text-h3 {
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  .text-lead {
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--muted-foreground);
+  }
+
+  .container-page {
+    width: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 0.5rem + 2.5vw, 2rem);
+  }
+  .section {
+    padding-block: clamp(4.5rem, 3rem + 6vw, 8.5rem);
+    position: relative;
+  }
+
+  .text-gradient {
+    background: linear-gradient(100deg, var(--brand-primary) 0%, #3fd0bd 45%, var(--brand-accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-gradient-dark {
+    background: linear-gradient(100deg, #0e8f81 0%, var(--brand-primary) 55%, #2fc4b1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Subtle engineering grid texture */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgb(16 27 43 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(16 27 43 / 0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .theme-dark .bg-grid,
+  .bg-grid-dark {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .mask-fade-y {
+    mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+  }
+  .mask-radial {
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 72%);
+  }
+
+  /* Card surfaces */
+  .surface-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+  }
+  .surface-glass {
+    background: color-mix(in oklab, var(--surface) 78%, transparent);
+    border: 1px solid color-mix(in oklab, var(--border-strong) 70%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  .shimmer-line {
+    background: linear-gradient(90deg, var(--surface-muted) 0%, color-mix(in oklab, var(--brand-accent) 35%, white) 50%, var(--surface-muted) 100%);
+    background-size: 200% 100%;
+    animation: var(--animate-shimmer);
+  }
+}
+
+/* Rich text from CMS (legal pages etc.) */
+.prose-content {
+  max-width: 72ch;
+  color: var(--muted-foreground);
+  line-height: 1.75;
+}
+.prose-content :where(h2) {
+  color: var(--foreground);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 2.5rem 0 0.75rem;
+}
+.prose-content :where(h3) {
+  color: var(--foreground);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 2rem 0 0.5rem;
+}
+.prose-content :where(p, ul, ol) {
+  margin: 0 0 1rem;
+}
+.prose-content :where(ul) {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.prose-content :where(ol) {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}
+.prose-content :where(a) {
+  color: var(--primary-strong);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-content :where(strong) {
+  color: var(--foreground);
+}
