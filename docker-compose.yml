@@ -21,12 +21,14 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    ports:
+      - "3000:3000"
     depends_on:
       postgres:
         condition: service_healthy
     environment:
       DATABASE_URI: postgres://${POSTGRES_USER:-medhelper}:${POSTGRES_PASSWORD:-change-me}@postgres:5432/${POSTGRES_DB:-medhelper}
-      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:-default-dev-payload-secret-at-least-32-chars-long}
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://${DOMAIN:-localhost}}
       SITE_URL: ${SITE_URL:-https://${DOMAIN:-localhost}}
       AI_PLATFORM_URL: ${AI_PLATFORM_URL}

@@ -25,6 +25,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 ENV STANDALONE=1
+ENV PAYLOAD_SECRET="build-secret-dummy-min-32-chars-long-abcdef"
 
 # Generate Payload types & importmap, then build Next.js app
 RUN pnpm payload generate:importmap && pnpm build
