@@ -43,13 +43,30 @@ export default buildConfig({
   editor: lexicalEditor(),
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI || '' },
-    // In dev the schema is pushed automatically; production uses migrations (pnpm migrate).
-    push: process.env.NODE_ENV !== 'production',
-    migrationDir: path.resolve(dirname, 'migrations'),
+    // Automatically create and sync tables if migrations were not manually run
+    push: true,
   }),
   sharp,
-  cors: [siteUrl],
-  csrf: [siteUrl],
+  cors: [siteUrl, 'http://localhost:3000', 'http://localhost', 'http://127.0.0.1:3000', 'http://127.0.0.1'],
+  csrf: [siteUrl, 'http://localhost:3000', 'http://localhost', 'http://127.0.0.1:3000', 'http://127.0.0.1'],
+  onInit: async (payload) => {
+    try {
+      if (!process.env.DATABASE_URI) return
+      const { totalDocs } = await payload.count({ collection: 'users' })
+      if (totalDocs === 0) {
+        const email = process.env.SEED_ADMIN_EMAIL || 'admin@medhelper.ua'
+        const password = process.env.SEED_ADMIN_PASSWORD || 'AdminMedhelper2026!'
+        await payload.create({
+          collection: 'users',
+          data: { email, password, name: 'Super Admin', roles: ['super-admin'] },
+          overrideAccess: true,
+        })
+        payload.logger.info(`[onInit] Initial admin created: ${email}`)
+      }
+    } catch (err) {
+      payload.logger.warn(`[onInit] ${(err as Error).message}`)
+    }
+  },
   graphQL: { disablePlaygroundInProduction: true },
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
   email: smtpConfigured

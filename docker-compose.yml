@@ -29,8 +29,8 @@ services:
     environment:
       DATABASE_URI: postgres://${POSTGRES_USER:-medhelper}:${POSTGRES_PASSWORD:-change-me}@postgres:5432/${POSTGRES_DB:-medhelper}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET:-default-dev-payload-secret-at-least-32-chars-long}
-      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://${DOMAIN:-localhost}}
-      SITE_URL: ${SITE_URL:-https://${DOMAIN:-localhost}}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
       AI_PLATFORM_URL: ${AI_PLATFORM_URL}
       SMTP_HOST: ${SMTP_HOST}
       SMTP_PORT: ${SMTP_PORT}
