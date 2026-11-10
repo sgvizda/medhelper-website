@@ -22,8 +22,8 @@ RUN corepack enable
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Ensure public folder exists
-RUN mkdir -p /app/public
+# Ensure public folder exists and no local env files interfere with docker build
+RUN mkdir -p /app/public && rm -f .env .env.*
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
@@ -50,8 +50,8 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Media directory for local storage uploads
-RUN mkdir -p /app/media && chown -R nextjs:nodejs /app/media
+# Media directory for local storage uploads and clean any static env
+RUN mkdir -p /app/media && chown -R nextjs:nodejs /app/media && rm -f /app/.env /app/.next/standalone/.env
 
 USER nextjs
 
