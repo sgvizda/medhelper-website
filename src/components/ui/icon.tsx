@@ -47,8 +47,10 @@ const map: Record<IconName, LucideIcon> = {
   'message-square-text': MessageSquareText,
 }
 
+export type IconProps = Omit<LucideProps, 'name'> & { name?: string | null }
+
 /** Renders a CMS-selected icon by name, with a safe fallback. */
-export function Icon({ name, ...props }: { name?: string | null } & LucideProps) {
+export function Icon({ name, ...props }: IconProps) {
   const Cmp = (name && map[name as IconName]) || Sparkles
   return <Cmp aria-hidden="true" {...props} />
 }

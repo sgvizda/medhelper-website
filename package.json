@@ -22,7 +22,7 @@
     "generate:importmap": "payload generate:importmap",
     "migrate": "payload migrate",
     "migrate:create": "payload migrate:create",
-    "seed": "payload run src/seed/run.ts",
+    "seed": "tsx --env-file=.env src/seed/run.ts",
     "test": "vitest run",
     "test:unit": "vitest run",
     "test:e2e": "playwright test"

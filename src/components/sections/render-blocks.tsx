@@ -23,7 +23,10 @@ export function RenderBlocks({ blocks, settings }: { blocks: AnyBlock[]; setting
   return (
     <>
       {blocks.map((block, i) => {
-        const key = ('id' in block && block.id) || `${block.blockType}-${i}`
+        const key =
+          'id' in block && typeof block.id === 'string' && block.id
+            ? block.id
+            : `${block.blockType}-${i}`
         switch (block.blockType) {
           case 'hero':
             return <HeroSection key={key} block={block} settings={settings} />

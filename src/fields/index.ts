@@ -38,15 +38,27 @@ export const iconField = (overrides: Partial<Field> = {}): Field =>
 type TextOpts = { name: string; label: string; max?: number; required?: boolean; textarea?: boolean }
 
 /** Localized text with an enforced max length to protect the layout. */
-export const text = ({ name, label, max = 120, required = false, textarea = false }: TextOpts): Field => ({
-  name,
-  label,
-  type: textarea ? 'textarea' : 'text',
-  localized: true,
-  required,
-  maxLength: max,
-  admin: { description: `Максимум ${max} символів` },
-})
+export const text = ({ name, label, max = 120, required = false, textarea = false }: TextOpts): Field =>
+  (textarea
+    ? {
+        name,
+        label,
+        type: 'textarea',
+        localized: true,
+        required,
+        maxLength: max,
+        admin: { description: `Максимум ${max} символів` },
+      }
+    : {
+        name,
+        label,
+        type: 'text',
+        localized: true,
+        required,
+        maxLength: max,
+        admin: { description: `Максимум ${max} символів` },
+      }) as Field
+
 
 export const sectionHeader = (opts: { eyebrow?: boolean; description?: boolean } = {}): Field[] => [
   ...(opts.eyebrow === false ? [] : [text({ name: 'eyebrow', label: 'Надзаголовок', max: 40 })]),

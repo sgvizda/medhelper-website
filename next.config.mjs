@@ -33,7 +33,7 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: process.env.STANDALONE ? 'standalone' : undefined,
   poweredByHeader: false,
   reactStrictMode: true,
   images: {

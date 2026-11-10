@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isSuperAdmin, staff, superAdmin, superAdminField } from '@/access'
+import { isStaff, isSuperAdmin, staff, superAdmin, superAdminField } from '@/access'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -24,7 +24,7 @@ export const Users: CollectionConfig = {
       return req.user ? { id: { equals: req.user.id } } : false
     },
     delete: superAdmin,
-    admin: staff,
+    admin: ({ req }) => isStaff(req.user as never),
   },
   hooks: {
     beforeChange: [
